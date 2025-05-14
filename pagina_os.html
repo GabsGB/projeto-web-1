@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página OS</title>
+</head>
+<body>
+    <div class="modal" id="modal">
+        <div id="campos-clientes">
+            <h2>Ordem de Serviço</h2>
+            
+            <h3>informações do cliente</h3>
+
+            <h4>Contato</h4>
+
+            <label for="nome-cliente">Nome do cliente:</label>
+            <input type="text" id="nome-cliente" name="nome-cliente" required>
+
+            <label for="celular">Celular:</label>
+            <input type="number" id="celular" name="celular" required>
+
+            <label for="telefone">Telefone:</label>
+            <input type="number" id="telefone" name="telefone">
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email">
+            
+            
+
+            <h4> Endereço</h4>
+            <label for="cep-cliente">Cep:</label>
+            <input type="text" id="cep-cliente" name="cep-cliente" required>
+
+            <label for="endereco-cliente">Endereço:</label>
+            <input type="text" id="endereco-cliente" name="endereco-cliente" required>
+
+            <label for="cidade-cliente">Número da casa:</label> 
+            <input type="text" id="cidade-cliente" name="cidade-cliente" required>
+
+            <label for="bairro-cliente">Bairro:</label>
+            <input type="text" id="bairro-cliente" name="bairro-cliente" required>
+
+            <label for="cidade-cliente">Cidade:</label> 
+            <input type="text" id="cidade-cliente" name="cidade-cliente" required>
+
+            <label for="complemento-cliente">Complemento</label>
+            <input type="text" id="complemento-cliente" name="complemento-cliente" placeholder="casa n, bloco, ap...">
+
+
+        </div>
+
+        <br><br>
+
+        <div id="servicos">
+            <table id="tabela-servicos">
+                <caption>Serviços</caption>
+                <thead>
+                    <tr>
+                        <td>Tipo de Serviço</td>
+                        <td>Dificuldade</td>
+                        <td>Resumo</td>
+                        <td>Quantidade de máquinas</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <br>
+            <button onclick="document.getElementById('campos-servicos').style.display = 'block'">Adicionar Serviço</button>
+            <button onclick="document.getElementById('campos-servicos').style.display = 'none'">Fechar Serviço</button>
+            <br><br>
+
+            <div id="campos-servicos">
+            <label for="tipos-servicos">Tipo de Serviço:</label>
+            <select name="tipos-servicos" id="slc-tipoServicos" onchange="alteraCamposEspecificos()">
+                <option value="" selected></option>
+                <option value="instalacao">Instalação</option>
+                <option value="desinstalacao">Desinstalação</option>
+                <option value="manutencao">Manutenção</option>
+                <option value="higienizacao">Higienização</option>
+            </select>
+
+            <br><br>
+            <label for="dificuldade">Dificuldade do Serviço: </label>
+                <select name="dificuldade" id="slc-dificuldade">
+                    <option value="" selected></option>
+                    <option value="nivel1">Nivel 1</option>
+                    <option value="nivel2">Nivel 2</option>
+                    <option value="nivel3">Nivel 3</option>
+                </select>
+
+            <div id="campos-especificos">
+            </div>
+
+            </div>
+        </div>
+
+        <br>                
+
+        <div id="campos-maquinas">
+            <table id="tabela-maquinas">
+                <caption>Máquinas</caption>
+                <thead>
+                    <tr>
+                        <td>Tipo</td>
+                        <td>Modelo</td>
+                        <td>Capacidade</td>
+                        <td>Marca</td>
+                        <td>Info. Adic</td>
+                        <td>Gás Refrigerante</td>
+                        <td>Quantidade</td>
+                        <td>Ação</td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <button onclick="adicionarLinha()">Adicionar máquina</button> 
+            <br>
+            <button onclick="salvarMaquinas()">Salvar</button>
+        </div>
+        <br>
+        <button>Salvar Os</button>
+    </div>
+    <br>
+
+    <button onclick="document.getElementById('modal').style.display = 'block'" >Abrir Modal</button>
+    <button onclick="document.getElementById('modal').style.display = 'none'">Fechar Modal</button>
+<script src="js/modal.js"></script>
+<script src="js/tabelaMaquinas.js"></script>
+</body>
+</html>
