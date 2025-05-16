@@ -1,4 +1,4 @@
-function adicionarLinha() {
+function adicionarLinhaServicos() {
     console.log("Adicionando linha à tabela");    
     // Obter a tabela
     const tabela = document.getElementById("tabela-maquinas");

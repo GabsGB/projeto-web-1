@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="modal" id="modal">
+    <div class="modal" id="modal" style="display: none;">
         <div id="campos-clientes">
             <h2>Ordem de Serviço</h2>
             
@@ -37,7 +37,7 @@
             <input type="text" id="endereco-cliente" name="endereco-cliente" required>
 
             <label for="cidade-cliente">Número da casa:</label> 
-            <input type="text" id="cidade-cliente" name="cidade-cliente" required>
+            <input type="text" id="numCasa-cliente" name="cidade-cliente" required>
 
             <label for="bairro-cliente">Bairro:</label>
             <input type="text" id="bairro-cliente" name="bairro-cliente" required>
@@ -72,24 +72,29 @@
             <button onclick="document.getElementById('campos-servicos').style.display = 'none'">Fechar Serviço</button>
             <br><br>
 
-            <div id="campos-servicos">
-            <label for="tipos-servicos">Tipo de Serviço:</label>
-            <select name="tipos-servicos" id="slc-tipoServicos" onchange="alteraCamposEspecificos()">
-                <option value="" selected></option>
-                <option value="instalacao">Instalação</option>
-                <option value="desinstalacao">Desinstalação</option>
-                <option value="manutencao">Manutenção</option>
-                <option value="higienizacao">Higienização</option>
-            </select>
+            <div id="campos-servicos" style="display: none;">
+
+            <label>
+                Tipo de Serviço:
+                <select name="tipos-servicos" id="slc-tipoServicos" onchange="alteraCamposEspecificos()" required>
+                    <option value="" selected></option>
+                    <option value="instalacao">Instalação</option>
+                    <option value="desinstalacao">Desinstalação</option>
+                    <option value="manutencao">Manutenção</option>
+                    <option value="higienizacao">Higienização</option>
+                </select>
+            </label>
 
             <br><br>
-            <label for="dificuldade">Dificuldade do Serviço: </label>
-                <select name="dificuldade" id="slc-dificuldade">
+            <label>
+                Dificuldade do Serviço: 
+                <select name="dificuldade" id="slc-dificuldade" required>
                     <option value="" selected></option>
                     <option value="nivel1">Nivel 1</option>
                     <option value="nivel2">Nivel 2</option>
                     <option value="nivel3">Nivel 3</option>
                 </select>
+            </label>
 
             <div id="campos-especificos">
             </div>
@@ -117,18 +122,23 @@
                 <tbody>
                 </tbody>
             </table>
-            <button onclick="adicionarLinha()">Adicionar máquina</button> 
             <br>
-            <button onclick="salvarMaquinas()">Salvar</button>
+            <button onclick="adicionarLinhaMaquinas()">Adicionar máquina</button> 
+            <br>
         </div>
         <br>
         <button>Salvar Os</button>
+        <button onclick="salvarOS()">Verificar Campos</button>
     </div>
     <br>
 
     <button onclick="document.getElementById('modal').style.display = 'block'" >Abrir Modal</button>
     <button onclick="document.getElementById('modal').style.display = 'none'">Fechar Modal</button>
+    
 <script src="js/modal.js"></script>
 <script src="js/tabelaMaquinas.js"></script>
+<!-- <script src="js/tabelaServicos.js"></script> -->
+<script src="js/validacao.js"></script>
+
 </body>
 </html>
