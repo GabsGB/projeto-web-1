@@ -1,10 +1,10 @@
 function adicionarLinhaMaquinas() {
-    console.log("Adicionando linha à tabela");    
+    // console.log("Adicionando linha à tabela");    
     // Obter a tabela
-    const tabela = document.getElementById("tabela-maquinas");
+    const tabela = document.getElementById("tbl-maquinas");
     // console.log(tabela);
     const tbody = tabela.querySelector("tbody");
-    console.log(tbody);
+    // console.log(tbody);
 
     // Criar uma nova linha
     const novaLinha = tbody.insertRow();
@@ -40,41 +40,9 @@ function removerLinha(botao) {
     linha.parentNode.removeChild(linha);
 }
 
-function salvarMaquinas() {
-    const tabela = document.getElementById("tabela-maquinas");
+function limparTabelaMaquinas() {
+    console.log("Limpando tabela");
+    const tabela = document.getElementById("tbl-maquinas");
     const tbody = tabela.querySelector("tbody");
-    const linhas = tbody.querySelectorAll("tr");
-
-    console.log("Salvando máquinas");
-    // Obter a tabela
-    
-
-    // Criar um array para armazenar os dados das máquinas
-    let maquinas = [];
-
-    // Iterar sobre as linhas da tabela
-    linhas.forEach(linha => {
-        let tipo = linha.cells[0].querySelector("input").value;
-        let marca = linha.cells[1].querySelector("input").value;
-        let capacidade = linha.cells[2].querySelector("input").value;
-        let modelo = linha.cells[3].querySelector("input").value;
-        let infoAdicional = linha.cells[4].querySelector("input").value;
-        let gasRefrigerante = linha.cells[5].querySelector("input").value;
-        let quantidade = linha.cells[6].querySelector("input").value;
-
-        // Adicionar os dados da máquina ao array
-        maquinas.push({
-            tipo: tipo,
-            marca: marca,
-            capacidade: capacidade,
-            modelo: modelo,
-            infoAdicional: infoAdicional,
-            gasRefrigerante: gasRefrigerante,
-            quantidade: quantidade
-        });
-    });
-
-    console.log(maquinas);
-
+    tbody.innerHTML = ""; // Limpa todas as linhas do corpo da tabela
 }
-    

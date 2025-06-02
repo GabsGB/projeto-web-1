@@ -1,9 +1,8 @@
-class Servico{
-    constructor(tipoServico, aparelhos=[], difculdade = null) {
-        this.tipoServico = tipoServico;
-        this.aparelhos = aparelhos;
-        this.dificuldade = difculdade;
+export class Servico{
+    constructor(servico) {
+        this.tipoServico = servico.tipoServico;
+        this.dificuldade = servico.dificuldade;
+        this.infoAdicionais = servico.infoAdicionais || {}
+        this.maquinas = servico.maquinas;
     }
 }
-
-export default Servico;

@@ -1,9 +1,7 @@
-class Instalacao extends Servico{
-    constructor(tipoServico = "Instalação", dificuldade, aparelhos, instalacaoPadrao, distanciaExcedente) {
-        super(tipoServico, dificuldade, aparelhos);
-        this.instalacaoPadrao = instalacaoPadrao;
-        this.distanciaExcedente = distanciaExcedente;
+import {Servico} from './Servico.js';
+
+export class Instalacao extends Servico{
+    constructor(servico) {
+        super("Instalação", servico.dificuldade, servico.infoAdicionais, servico.maquinas);
     }
 }
-
-export default Instalacao;

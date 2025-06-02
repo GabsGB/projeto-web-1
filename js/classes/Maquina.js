@@ -1,4 +1,4 @@
-class Maquina{
+export class Maquina{
     constructor(tipo, modelo, capacidade, marca, infoAdicional, gasRefri, quantidade) {
         this.tipo = tipo;
         this.modelo = modelo;
@@ -9,5 +9,3 @@ class Maquina{
         this.quantidade = quantidade;
     }
 }
-
-export default Maquina;

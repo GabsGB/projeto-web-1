@@ -12,3 +12,14 @@ td {
 thead {
     background-color:LightGray;
 }
+.modal{
+    /* display: flex; */
+}
+.hidden {
+    display: none;
+}
+
+/* .show {
+    display: block !important
+} */
+

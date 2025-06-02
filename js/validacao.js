@@ -1,3 +1,4 @@
+// Funções de validação de tipos de campos do formulário
 function marcarCampoInvalido(campo) {
     campo.style.backgroundColor = "LightCoral";
 }
@@ -43,9 +44,67 @@ function validarRadios(radios) {
     }
 }
 
+// Validação dos campos do formulário de cliente, serviços e máquinas
+function validarCamposOs() {
+    console.log("INICIANDO VALIDAÇÃO DE CAMPOS DA OS ")
+
+    // validação CLIENTE
+
+    if(!validarCamposCliente()) {
+        alert("Preencha todos os campos de cliente!");
+        return;
+    }
+    console.log("Cliente validado")
+
+    
+    // validação SERVIÇO
+    if(!validarCamposModalS())return
+    
+}
+
+function validarCamposModalS() {
+    const tabelaServico = document.getElementById("tbl-servicos");
+    const div = document.getElementById('modal-servicos');
+
+    if (div.classList.contains("hidden") && validarTabelaVazia(tabelaServico)) {
+        alert("É preciso adcionar um serviço a Ordem de Serviço.");
+        return;
+    }
+
+    if (!validarCamposServicos()) {
+        alert("Preencha todos os campos de serviços obrigatórios.");
+        return;
+    }
+
+    // validação MAQUINAS
+
+    const tabelaMaquinas = document.getElementById("tbl-maquinas");
+    
+    if (!validarTabelaVazia(tabelaMaquinas)) {
+        if (!validarCamposMaquinas()) {
+            alert("Preencha todos os campos de máquinas obrigatórios.");
+            return;
+        }
+    } else {
+        alert("É preciso adicionar uma máquina ao Serviço.");
+        return;
+    }
+
+    console.log("Servicos e maquinas validados")
+    console.log("FIM DA VALIDAÇÃO DE CAMPOS DA OS!")
+    return true;
+}
+
+function validarTabelaVazia(tabela) {
+    
+    const linhas = tabela.querySelectorAll("tbody tr");
+    
+    return linhas.length <= 0;
+}
+
 function validarCamposCliente() {
     let valido = true;
-
+    
     const divCampos = document.getElementById("campos-clientes")
     const camposCliente = divCampos.querySelectorAll("input");
 
@@ -62,31 +121,51 @@ function validarCamposCliente() {
 function validarCamposServicos() {
     let valido = true;
 
-    const camposServicos = document.getElementById("campos-servicos");
-    const radiosInstalacao = document.querySelectorAll('input[name="instalacao-padrao"]');
-    const numDistancia = document.getElementById("num-distancia");
+    const tipoServico = document.getElementById("slc-tipoServicos").value;
 
+    const camposServicos = document.getElementById("modal-servicos");
     //Validação de selects
     if (!validarSelects(camposServicos)) valido = false;
 
-    //validação de radio
-    if (!validarRadios(radiosInstalacao)) {
-        valido = false;
-    } else{
-        // Se o radio "não" estiver selecionado, valida o campo de distância
-        const valorRadio = Array.from(radiosInstalacao).find(radio => radio.checked).value;
-        console.log(valorRadio);
+    switch (tipoServico) {
+        case "instalacao":
+            const pInstalacaoInfra = document.getElementById("radios-instalacao-infra")
+            const radiosInstalacaoInfra = pInstalacaoInfra.querySelectorAll('input');
 
-        if (valorRadio === "nao") {
-            if (!validarCampoVazio(numDistancia)){
-                
-                marcarCampoInvalido(numDistancia);
+            if (!validarRadios(radiosInstalacaoInfra)) {
                 valido = false;
-            } 
-        } else {
-            marcarCampoValido(numDistancia);
-        }
+            }
+
+            const pInstalacaoPadrao = document.getElementById("radios-instalacao-padrao")
+            const radiosInstalacaoPadrao = pInstalacaoPadrao.querySelectorAll('input[name="instalacao-padrao"]');
+            const numDistancia = document.getElementById("num-distancia");
+
+            if (!validarRadios(radiosInstalacaoPadrao)) {
+                valido = false;
+            } else {
+                const valorRadioSelecionado = Array.from(radiosInstalacaoPadrao).find(radio => radio.checked)?.value;
+
+                if (valorRadioSelecionado === "nao") {
+                    if (!validarCampoVazio(numDistancia)) valido = false;
+                } else {
+                    marcarCampoValido(numDistancia);
+                }
+            }
+            break;
+
+
+        case "manutencao":
+            const defeito = document.getElementById("defeito");
+
+            if (!validarCampoVazio(defeito)) {
+                marcarCampoInvalido(defeito);
+                valido = false;
+            } else marcarCampoValido(defeito);
+
+            break;
     }
+    
+    console.log("Final da validação de serviços!" + valido);
 
     return valido;
 }
@@ -94,12 +173,12 @@ function validarCamposServicos() {
 function validarCamposMaquinas() {
     let valido = true;
 
-    const tabelaMaquinas = document.getElementById("tabela-maquinas");
+    const tabelaMaquinas = document.getElementById("tbl-maquinas");
     const tbody = tabelaMaquinas.querySelector("tbody");
     const linhas = tbody.querySelectorAll("tr");
 
     linhas.forEach(linha => {
-        linha.querySelectorAll('[required').forEach(input => {
+        linha.querySelectorAll('[required]').forEach(input => {
             // console.log('input: ' + input.value);
             if (!validarCampoVazio(input)) valido = false;
         });
