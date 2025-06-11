@@ -1,6 +1,8 @@
-import {Maquina} from "./classes/Maquina.js";
+import {Maquina} from "../classes/Maquina.js";
+import { validarMaquinasDuplicadas } from "./validacao.js";
+import { marcarMaquinaDuplicada } from "../tabelas/tabelaMaquinas.js";
 
-window.obterCliente = function() {
+export function obterCliente() {
     const cliente = {
         nome: document.getElementById("nome-cliente").value,
         celular: document.getElementById("celular-cliente").value,
@@ -17,41 +19,63 @@ window.obterCliente = function() {
     return cliente;
 }
 
-window.obterMaquina = function() {
-    const tabela = document.getElementById("tbl-maquinas");
-    const tbody = tabela.querySelector("tbody");
-    const linhas = tbody.querySelectorAll("tr");    
+function obterMaquina() {
+    const linhas = document.querySelectorAll("#tbl-maquinas tbody tr");
 
     // Criar um array para armazenar os dados das máquinas
+    let tempMaquinas = [];
     let maquinas = [];
 
     // Iterar sobre as linhas da tabela
     linhas.forEach(linha => {
-        let tipo = linha.cells[0].querySelector("input").value;
-        let marca = linha.cells[1].querySelector("input").value;
-        let capacidade = linha.cells[2].querySelector("input").value;
-        let modelo = linha.cells[3].querySelector("input").value;
-        let infoAdicional = linha.cells[4].querySelector("input").value;
-        let gasRefrigerante = linha.cells[5].querySelector("input").value;
-        let quantidade = linha.cells[6].querySelector("input").value;
-
-        const maquina = new Maquina(tipo, marca, capacidade, modelo, infoAdicional, gasRefrigerante, quantidade);
-
-        // Adicionar os dados da máquina ao array
-        maquinas.push(maquina);
+        let aparelho = {
+            tipo: linha.cells[0].querySelector("input").value,
+            marca: linha.cells[1].querySelector("input").value,
+            capacidade: linha.cells[2].querySelector("input").value,
+            modelo: linha.cells[3].querySelector("input").value,
+            infoAdicional: linha.cells[4].querySelector("input").value,
+            gasRefrigerante: linha.cells[5].querySelector("input").value,
+            quantidade: linha.cells[6].querySelector("input").value
+        }
+        tempMaquinas.push(aparelho)
     });
 
-    console.log(maquinas);
+    const indDuplicados = validarMaquinasDuplicadas(tempMaquinas)
+    // console.log(indDuplicados)
+
+    if (indDuplicados.length > 0) {
+        marcarMaquinaDuplicada(indDuplicados);
+        alert('Existem maquinas duplicadas corrigir para prosseguir!');
+        return;
+    }
+
+    tempMaquinas.forEach(maquina => { 
+        maquinas.push(
+            new Maquina(
+                maquina.tipo,
+                maquina.marca,
+                maquina.capacidade,
+                maquina.modelo,
+                maquina.infoAdicional,
+                maquina.gasRefrigerante,
+                maquina.quantidade
+            )
+        )
+    
+    });
+
+    // console.log(maquinas);
     return maquinas
 }
 
-window.obterServico = function() {
+export function obterServico() {
 
     console.log("Obtendo serviço");
     let tipoServico = document.getElementById("slc-tipoServicos").value;
 
     const dificuldade = document.getElementById("slc-dificuldade").value;
     const maquinas = obterMaquina();
+    if (!maquinas)return;
     
     let totalMaquinas = 0;
     let infoAdicionais = {};
@@ -102,6 +126,6 @@ window.obterServico = function() {
                 quantidade: totalMaquinas
             }
 
-    console.log(servico);
+    // console.log(servico);
     return servico;
 }

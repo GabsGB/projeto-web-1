@@ -1,5 +1,13 @@
-function adicionarLinhaMaquinas() {
-    // console.log("Adicionando linha à tabela");    
+document.getElementById('btn-addLinhaMaquina').addEventListener('click', adicionarLinhaMaquinas);
+
+document.addEventListener('click', function(event){
+    if (event.target && event.target.classList.contains("btn-remover-maquina")) {
+        removerLinhaMaquina(event.target);
+    }
+})
+
+export function adicionarLinhaMaquinas() {
+    // console.log("Adicionando linha à tabela");
     // Obter a tabela
     const tabela = document.getElementById("tbl-maquinas");
     // console.log(tabela);
@@ -28,11 +36,10 @@ function adicionarLinhaMaquinas() {
     celula5.innerHTML = "<input type='text' placeholder='Info Adicional'>";
     celula6.innerHTML = "<input type='text' placeholder='Gás Refri' required>";
     celula7.innerHTML = "<input type='number' placeholder='Quantidade' required>";
-    celula8.innerHTML = "<button onclick='removerLinha(this)'>Remover</button>";
-    
+    celula8.innerHTML = "<button class='btn-remover-maquina'>Remover</button>";
 }
 
-function removerLinha(botao) {
+export function removerLinhaMaquina(botao) {
     console.log("Removendo linha da tabela");
     // Obter a linha do botão clicado
     const linha = botao.parentNode.parentNode;
@@ -40,9 +47,16 @@ function removerLinha(botao) {
     linha.parentNode.removeChild(linha);
 }
 
-function limparTabelaMaquinas() {
-    console.log("Limpando tabela");
+export function limparTabelaMaquinas() {
+    // console.log("Limpando tabela");
     const tabela = document.getElementById("tbl-maquinas");
     const tbody = tabela.querySelector("tbody");
     tbody.innerHTML = ""; // Limpa todas as linhas do corpo da tabela
+}
+
+export function marcarMaquinaDuplicada(indices) {
+    const linhas = document.querySelectorAll('#tbl-maquinas tbody tr');
+    linhas.forEach((linha, i) => linha.classList.remove("duplicada")); // limpa as linhas
+
+    indices.forEach(i => { linhas[i].classList.add("duplicada")}); // Formata as linhas baseadas no indice
 }

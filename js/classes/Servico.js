@@ -3,6 +3,7 @@ export class Servico{
         this.tipoServico = servico.tipoServico;
         this.dificuldade = servico.dificuldade;
         this.infoAdicionais = servico.infoAdicionais || {}
-        this.maquinas = servico.maquinas;
+        this.maquinas = servico.maquinas || [];
+        this.quantidade = servico.quantidade || 0;
     }
 }

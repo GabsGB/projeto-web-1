@@ -2,6 +2,12 @@ import {Servico} from './Servico.js';
 
 export class Higienizacao extends Servico{
     constructor(servico) {
-        super("Higienização", servico.dificuldade, servico.infoAdicionais, servico.maquinas);   
+        super({
+            tipoServico:"Higienização",
+            dificuldade: servico.dificuldade,
+            infoAdicionais: servico.infoAdicionais,
+            maquinas: servico.maquinas,
+            quantidade: servico.quantidade
+        });   
     }
 }

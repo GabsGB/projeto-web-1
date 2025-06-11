@@ -45,7 +45,7 @@ function validarRadios(radios) {
 }
 
 // Validação dos campos do formulário de cliente, serviços e máquinas
-function validarCamposOs() {
+export function validarCamposOs() {
     console.log("INICIANDO VALIDAÇÃO DE CAMPOS DA OS ")
 
     // validação CLIENTE
@@ -62,7 +62,7 @@ function validarCamposOs() {
     
 }
 
-function validarCamposModalS() {
+export function validarCamposModalS() {
     const tabelaServico = document.getElementById("tbl-servicos");
     const div = document.getElementById('modal-servicos');
 
@@ -187,3 +187,120 @@ function validarCamposMaquinas() {
     return valido;
     
 }
+
+export function validarMaquinasDuplicadas(array) {
+    const listaChecado = new Set();
+    let indexDuplicados = [];
+
+    array.forEach((obj, index) => {
+        const keys = Object.keys(obj);
+        const keysSemUltimo = keys.slice(0, -1); // todas menos a última
+        const objSemUltimoCampo = {};
+
+        keysSemUltimo.forEach(key => {
+            objSemUltimoCampo[key] = obj[key];
+        });
+
+        const str = JSON.stringify(objSemUltimoCampo);
+
+        if (listaChecado.has(str)) {
+            indexDuplicados.push(index);
+        } else {
+            listaChecado.add(str);
+        }
+    });
+
+    return indexDuplicados;
+}
+
+export function validarServicoDuplicado(servicoNovo, servicos, debug = true) {
+    return servicos.some((servicoArmazenado, index) => {
+        if (debug) console.log(`\n🔍 Verificando possível duplicidade com serviço armazenado #${index + 1}`);
+        if (debug) console.log(`\n🔍 Serviço armazenado inteiro:`);
+        if (debug) console.log(servicoArmazenado);
+        if (debug) console.log(`\n🔍 Serviço Novo:`);
+        if (debug) console.log(servicoNovo);
+
+        // 1️⃣ Comparar campos principais (exceto 'quantidade' e 'maquinas')
+        function compararCamposPrincipais() {
+            const chaves = Object.keys(servicoNovo).filter(
+                k => k !== "maquinas" && k !== "quantidade"
+            );
+
+            for (let chave of chaves) {
+                const valNovo = servicoNovo[chave];
+                const valArmazenado = servicoArmazenado[chave];
+
+                if (debug) console.log(`🔑 Comparando campo '${chave}':`, valNovo, valArmazenado);
+
+                const ambosObjetos = typeof valNovo === 'object' && valNovo !== null &&
+                                     typeof valArmazenado === 'object' && valArmazenado !== null;
+
+                if (ambosObjetos) {
+                    if (JSON.stringify(valNovo) !== JSON.stringify(valArmazenado)) {
+                        if (debug) console.log("❌ Diferença detectada em objeto:", chave);
+                        return false;
+                    }
+                } else {
+                    if (valNovo !== valArmazenado) {
+                        if (debug) console.log("❌ Valores diferentes:", chave);
+                        return false;
+                    }
+                }
+            }
+
+            if (debug) console.log("✅ Todos os campos principais coincidem.");
+            return true;
+        }
+
+        // 2️⃣ Comparar a quantidade de máquinas
+        function compararQuantidade() {
+            if (debug) console.log(`🔢 Comparando quantidade: ${servicoNovo.quantidade} vs ${servicoArmazenado.quantidade}`);
+            const iguais = servicoNovo.quantidade === servicoArmazenado.quantidade;
+            if (debug) console.log(iguais ? "✅ Quantidade igual." : "❌ Quantidades diferentes!");
+            return iguais;
+        }
+
+        // 3️⃣ Comparar máquinas
+        function compararMaquinas() {
+            const normalizarMaquina = maquina => {
+                const entradasOrdenadas = Object.entries(maquina)
+                    .sort(([a], [b]) => a.localeCompare(b));
+                return JSON.stringify(Object.fromEntries(entradasOrdenadas));
+            };
+
+            const maquinasNovo = servicoNovo.maquinas.map(normalizarMaquina).sort();
+            const maquinasArmazenado = servicoArmazenado.maquinas.map(normalizarMaquina).sort();
+
+            if (debug) {
+                console.log("🛠️ Comparando máquinas...");
+                console.log("📦 Novo:", maquinasNovo);
+                console.log("📦 Armazenado:", maquinasArmazenado);
+            }
+
+            if (maquinasNovo.length !== maquinasArmazenado.length) {
+                if (debug) console.log("❌ Quantidade de máquinas diferente!");
+                return false;
+            }
+
+            const iguais = JSON.stringify(maquinasNovo) === JSON.stringify(maquinasArmazenado);
+            if (debug) console.log(iguais ? "✅ Máquinas iguais." : "❌ Máquinas diferentes!");
+            return iguais;
+        }
+
+        // 🔁 Executar validações na ordem
+        const duplicado = (
+            compararCamposPrincipais() &&
+            compararQuantidade() &&
+            compararMaquinas()
+        );
+
+        if (debug) {
+            if (duplicado) console.log("⚠️ Serviço duplicado detectado!");
+            else console.log("✔️ Serviço não é duplicado.");
+        }
+
+        return duplicado;
+    });
+}
+

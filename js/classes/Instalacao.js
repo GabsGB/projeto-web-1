@@ -2,6 +2,12 @@ import {Servico} from './Servico.js';
 
 export class Instalacao extends Servico{
     constructor(servico) {
-        super("Instalação", servico.dificuldade, servico.infoAdicionais, servico.maquinas);
+        super({
+            tipoServico:"Instalação",
+            dificuldade:servico.dificuldade,
+            infoAdicionais:servico.infoAdicionais,
+            maquinas: servico.maquinas,
+            quantidade: servico.quantidade
+        });
     }
 }

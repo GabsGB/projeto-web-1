@@ -39,23 +39,20 @@ export class Os{
                 return;
                 break;
         }
+        // console.log("Serviço a ser adicionado:")
+        // console.log(servicoNovo)
         this.servicos.push(servicoNovo);
     }
+    
     removerServico(index){
-        if (this.servicos.length === 0){
-            alert("Lista de serviços vazia! não é possivel retirar nenhum serviço.");
-            return;
-        }
+        if (this.servicos.length === 0)throw new Error ("Lista de serviços vazia! não é possivel retirar nenhum serviço.");
 
-        if (index < 0 || index >= this.servicos.length) {
-            alert("Index inválido!");
-            return;
-        }
+        if (index < 0 || index >= this.servicos.length) throw new Error ("Index inválido!");
 
-        console.log("Serviço a ser removido:");
-        console.log(this.servicos[index]);
+        // console.log("Serviço a ser removido:");
+        // console.log(this.servicos[index]);
         this.servicos.splice(index, 1);
-        console.log("Serviço removido!");        
+        // console.log("Serviço removido!");
     }
 
     resetarOrdemServico() {
