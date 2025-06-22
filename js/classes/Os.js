@@ -11,9 +11,22 @@ export class Os{
         this.dataAbertura = new Date();
     }
 
-    // numerOS() {
+    async atualizarNumOS() {
+        try {
+                const resposta = await fetch("https://script.google.com/macros/s/AKfycbyDaypJ07MLdCo3kmzsBpiFakUS8ASvCFjsrCZrx9Kn_9NfIVqoJ_UmGAUpWH8t5qhI/exec?acao=getNumOs");
         
-    // }
+                if (!resposta.ok) {
+                    throw new Error(`Erro ao buscar número da OS!`);
+                }
+        
+                const dados = await resposta.text();
+                console.log("Número obtido:", dados);
+                this.numeroOs = dados+1;
+
+            } catch (erro) {
+                console.error("Erro ao buscar número da OS:", erro);
+            }
+     }
 
     atualizarCliente({cliente}) {
         this.cliente = cliente;

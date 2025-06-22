@@ -1,5 +1,6 @@
 import { Os } from './classes/Os.js';
 import { limparOs, abrirElemento, fecharElemento } from './modais/modalOs.js';
+import { obterCliente } from './util/obterDados.js';
 
 let osAtual = null;
 
@@ -8,57 +9,86 @@ export function getOsAtual() {
 }
 
 export function criarOS() {
-
     console.log("Criando OS");
 
     if (osAtual) {
-        console.log("OS já existente!");
         const continuar = confirm("Uma OS já está em andamento. Deseja descartá-la e criar uma nova?");
-        console.log(continuar);
-
         if (!continuar) {
-            // Só reabre o modal com a OS atual
             abrirElemento("modal");
-            console.log("Reabrindo OS atual.");
             return;
         }
     }
 
     osAtual = new Os();
+    // osAtual.atualizarNumOS();
     limparOs();
     abrirElemento("modal");
-    console.log("Nova OS criada!");
 }
 
 export function finalizarOS() {
+    const confirmar = confirm("Deseja realmente finalizar e enviar a OS?");
+    if (!confirmar) return;
+
+    const cliente = obterCliente();
+    adicionarClienteNaOS(cliente);
+
+    // Validação antes de enviar
+    if (!osAtual || osAtual.servicos.length === 0) {
+        alert("Adicione pelo menos um serviço antes de finalizar a OS.");
+        return;
+    }
+
     enviarOs();
 }
 
-export function enviarOs() {
-    if (validarCamposOS()){
-        enviarOs(osAtual);
-        console.log("Ordem de Serviço finalizada com sucesso!", osAtual);
-        fecharElemento("modal");
+export async function enviarOs() {
+    // Falta corrigir o erro CORS
+    try {
+        const resposta = await fetch("https://script.google.com/macros/s/AKfycbyDaypJ07MLdCo3kmzsBpiFakUS8ASvCFjsrCZrx9Kn_9NfIVqoJ_UmGAUpWH8t5qhI/exec", {
+            method: "POST",
+            body: JSON.stringify(osAtual),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!resposta.ok) {
+            throw new Error(`Erro na resposta: ${resposta.status} ${resposta.statusText}`);
+        }
+
+        const texto = await resposta.text();
+        console.log("OS enviada com sucesso:", texto);
+        alert("OS enviada com sucesso!");
+
         osAtual = null;
+        fecharElemento("modal");
+
+    } catch (erro) {
+        console.error("Erro ao enviar OS:", erro);
+        alert("Erro ao enviar OS! Verifique a conexão e tente novamente.");
     }
-    // fetch()
 }
 
 export function adicionarServicoNaOS(servico) {
     if (osAtual) {
-        osAtual.adicionarServico(servico)
-        // console.log("Servico adicionado a OS!")
-        // console.log("Servico:")
-        // console.log(servico)
-        // console.log("Ordem de serviço:")
-        // console.log(osAtual)
+        osAtual.adicionarServico(servico);
+    } else {
+        console.error("Nenhuma OS ativa!");
     }
-    else {
-        console.error("Nenhuma OS ativa!")
+}
+
+export function adicionarClienteNaOS(cliente) {
+    if (osAtual) {
+        osAtual.atualizarCliente(cliente);
+    } else {
+        console.error("Nenhuma OS ativa!");
     }
 }
 
 export function removerServicoNaOs(index) {
-    if (osAtual) osAtual.removerServico(index)
-    else console.error("Nenhuma OS ativa.")
+    if (osAtual) {
+        osAtual.removerServico(index);
+    } else {
+        console.error("Nenhuma OS ativa.");
+    }
 }
